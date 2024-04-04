@@ -1,0 +1,40 @@
+.anchor-pane {
+    -fx-background-color: #334956;
+    -fx-padding: 50px;
+}
+
+.v-box{
+    -fx-alignment: center;
+}
+
+.welcome-text{
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 24px;
+}
+
+.primary-btn{
+    -fx-background-color: lightblue;
+    -fx-text-fill: #334956;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.err-mess, .acc-exist{
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+}
+.err-mess{
+    -fx-background-color: red;
+}
+
+
+.acc-exist{
+    -fx-background-color: #02b202;
+}
+
+.user-signin{
+
+}

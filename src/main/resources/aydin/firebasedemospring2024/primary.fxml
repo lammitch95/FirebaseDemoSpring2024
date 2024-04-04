@@ -3,31 +3,27 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aydin.firebasedemospring2024.PrimaryController">
+<AnchorPane styleClass="anchor-pane" stylesheets="@primary.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aydin.firebasedemospring2024.PrimaryController">
     <children>
-        <VBox alignment="CENTER" prefHeight="373.0" prefWidth="530.0" spacing="20.0">
+        <VBox alignment="CENTER" prefHeight="373.0" prefWidth="530.0" spacing="20.0" styleClass="v-box" stylesheets="@primary.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
             <children>
-            <Label text="CSC325-SW Engineering Student: check out the console window for the output messages..." />
-                <TextField fx:id="nameTextField" promptText="name" />
-                <TextField fx:id="ageTextField" promptText="age" />
-                <HBox alignment="TOP_CENTER" prefHeight="55.0" prefWidth="518.0" spacing="10.0">
+            <Label styleClass="welcome-text" text="Click Register to Generate  Account" />
+                <TextField fx:id="nameTextField" prefHeight="49.0" prefWidth="490.0" promptText="Email" />
+                <HBox alignment="TOP_CENTER" prefHeight="55.0" prefWidth="518.0" spacing="50.0">
                     <children>
-                        <Button fx:id="readButton" mnemonicParsing="false" onAction="#readButtonClicked" prefHeight="30.0" prefWidth="80.0" text="Read" />
-                        <Button fx:id="writeButton" mnemonicParsing="false" onAction="#writeButtonClicked" prefHeight="30.0" prefWidth="80.0" text="Write" />
-                        <Button fx:id="registerButton" mnemonicParsing="false" onAction="#registerButtonClicked" prefHeight="30.0" prefWidth="80.0" text="Register" />
-                        <Button fx:id="switchSecondaryViewButton" onAction="#switchToSecondary" prefHeight="30.0" prefWidth="180.0" text="Switch to Secondary View" />
+                        <Button fx:id="registerButton" mnemonicParsing="false" onAction="#registerButtonClicked" prefHeight="30.0" prefWidth="80.0" styleClass="primary-btn" stylesheets="@primary.css" text="Register" />
+                  <Button fx:id="signinBtn" layoutX="215.0" layoutY="10.0" mnemonicParsing="false" onAction="#onSigninClick" prefHeight="30.0" prefWidth="80.0" styleClass="primary-btn" stylesheets="@primary.css" text="Signin" />
                     </children>
                 </HBox>
-                <TextArea fx:id="outputTextArea" prefHeight="218.0" prefWidth="507.0" />
+            <Label fx:id="errorMess" alignment="CENTER" prefHeight="79.0" prefWidth="310.0" styleClass="err-mess" stylesheets="@primary.css" text="Click &quot;Register&quot; to create user account for access to read and write" textAlignment="CENTER" wrapText="true" />
             </children>
         </VBox>
     </children>

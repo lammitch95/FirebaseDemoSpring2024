@@ -26,14 +26,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class DemoApp extends Application {
+public class  DemoApp extends Application {
     public static Scene scene;
+
+    public  static  Stage theStage;
 
     public static Firestore fstore;
     public static FirebaseAuth fauth;
     private final FirestoreContext contxtFirebase = new FirestoreContext();
 
-    @Override
     public void start(Stage stage) throws IOException {
         fstore = contxtFirebase.firebase();
         fauth = FirebaseAuth.getInstance();
@@ -41,8 +42,31 @@ public class DemoApp extends Application {
         scene = new Scene(loadFXML("primary"), 640, 480);
         stage.setScene(scene);
         stage.show();
+        theStage = stage;
+
     }
 
+    public void stop() throws Exception {
+
+        String useForSignin = PrimaryController.getUserSignin();
+        try {
+            if (useForSignin != null && !useForSignin.isEmpty()) {
+                UserRecord userRecord = DemoApp.fauth.getUserByEmail(useForSignin);
+                if (userRecord != null) {
+                    DemoApp.fauth.deleteUser(userRecord.getUid());
+                    System.out.println("User account deleted successfully.");
+                } else {
+                    System.err.println("User account with email " + useForSignin + " doesn't exist.");
+                }
+            }
+        } catch (FirebaseAuthException e) {
+            System.err.println("Error deleting user account: " + e.getMessage());
+        }
+    }
+
+        public static Stage getTheStage(){
+            return theStage;
+        }
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }

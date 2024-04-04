@@ -5,6 +5,7 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import java.io.IOException;
@@ -17,53 +18,49 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 public class PrimaryController {
     @FXML
-    private TextField ageTextField;
+    private Label errorMess;
 
     @FXML
     private TextField nameTextField;
 
     @FXML
-    private TextArea outputTextArea;
-
-    @FXML
-    private Button readButton;
-
-    @FXML
     private Button registerButton;
 
     @FXML
-    private Button switchSecondaryViewButton;
+    private Button signinBtn;
 
-    @FXML
-    private Button writeButton;
-
-    private boolean key;
-    private ObservableList<Person> listOfUsers = FXCollections.observableArrayList();
-    private Person person;
-
-    public ObservableList<Person> getListOfUsers() {
-        return listOfUsers;
-    }
+    private static String useForSignin;
 
     void initialize() {
-
-        AccessDataView accessDataViewModel = new AccessDataView();
-        nameTextField.textProperty().bindBidirectional(accessDataViewModel.personNameProperty());
-        writeButton.disableProperty().bind(accessDataViewModel.isWritePossibleProperty().not());
+        useForSignin = "";
     }
 
+    public static String getUserSignin(){
+        return useForSignin;
+    }
 
     @FXML
-    void readButtonClicked(ActionEvent event) {
-        readFirebase();
+    void onSigninClick(ActionEvent event) throws IOException {
+
+        try {
+            String userEmailInput = nameTextField.getText();
+            UserRecord userRecord = DemoApp.fauth.getUserByEmail(userEmailInput);
+            DemoApp.setRoot("secondary");
+            System.out.println("Your account is authethicated.");
+            useForSignin = userEmailInput;
+            DemoApp.setRoot("secondary");
+        } catch (Exception e) {
+            errorMess.getStyleClass().clear();
+            errorMess.getStyleClass().add("err-mess");
+            errorMess.setText("Error Authenticating Sign in. Check spelling for sign in account \"user222@example.com\"");
+        }
+
     }
+
 
     @FXML
     void registerButtonClicked(ActionEvent event) {
@@ -71,53 +68,6 @@ public class PrimaryController {
     }
 
 
-    @FXML
-    void writeButtonClicked(ActionEvent event) {
-        addData();
-    }
-
-    @FXML
-    private void switchToSecondary() throws IOException {
-        DemoApp.setRoot("secondary");
-    }
-    public boolean readFirebase()
-    {
-        key = false;
-
-        //asynchronously retrieve all documents
-        ApiFuture<QuerySnapshot> future =  DemoApp.fstore.collection("Persons").get();
-        // future.get() blocks on response
-        List<QueryDocumentSnapshot> documents;
-        try
-        {
-            documents = future.get().getDocuments();
-            if(documents.size()>0)
-            {
-                System.out.println("Getting (reading) data from firabase database....");
-                listOfUsers.clear();
-                for (QueryDocumentSnapshot document : documents)
-                {
-                    outputTextArea.setText(outputTextArea.getText()+ document.getData().get("Name")+ " , Age: "+
-                            document.getData().get("Age")+ " \n ");
-                    System.out.println(document.getId() + " => " + document.getData().get("Name"));
-                    person  = new Person(String.valueOf(document.getData().get("Name")),
-                            Integer.parseInt(document.getData().get("Age").toString()));
-                    listOfUsers.add(person);
-                }
-            }
-            else
-            {
-                System.out.println("No data");
-            }
-            key=true;
-
-        }
-        catch (InterruptedException | ExecutionException ex)
-        {
-            ex.printStackTrace();
-        }
-        return key;
-    }
 
     public boolean registerUser() {
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
@@ -133,6 +83,10 @@ public class PrimaryController {
             userRecord = DemoApp.fauth.createUser(request);
             System.out.println("Successfully created new user with Firebase Uid: " + userRecord.getUid()
             + " check Firebase > Authentication > Users tab");
+            errorMess.setText("Account has been create. Sign in with email \"user222@example.com\"");
+            errorMess.getStyleClass().clear();
+            errorMess.getStyleClass().add("acc-exist");
+
             return true;
 
         } catch (FirebaseAuthException ex) {
@@ -143,15 +97,4 @@ public class PrimaryController {
 
     }
 
-    public void addData() {
-
-        DocumentReference docRef = DemoApp.fstore.collection("Persons").document(UUID.randomUUID().toString());
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("Name", nameTextField.getText());
-        data.put("Age", Integer.parseInt(ageTextField.getText()));
-
-        //asynchronously write data
-        ApiFuture<WriteResult> result = docRef.set(data);
-    }
 }

@@ -1,0 +1,18 @@
+.write-display{
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 20px;
+    -fx-background-color:  #334956;
+}
+
+.write-lbl{
+
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+.data-display{
+    -fx-text-fill:  #334956;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+}
