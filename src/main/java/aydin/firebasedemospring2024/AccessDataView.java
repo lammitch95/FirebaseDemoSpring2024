@@ -9,7 +9,7 @@ public class AccessDataView{
 
     private final StringProperty personName = new SimpleStringProperty();
     private final int age=0;
-    private final ReadOnlyBooleanWrapper writePossible = new ReadOnlyBooleanWrapper();
+     private final ReadOnlyBooleanWrapper writePossible = new ReadOnlyBooleanWrapper();
 
     public AccessDataView() {
         writePossible.bind(personName.isNotEmpty());
